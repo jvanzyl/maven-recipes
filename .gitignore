@@ -1,0 +1,9 @@
+target/
+.project
+.classpath
+.settings/
+.svn/
+bin/
+# Intellij
+*.ipr
+*.iml
