@@ -10,6 +10,6 @@ app-0.0.1-SNAPSHOT
     └── sql.properties
 ```
 
-For details on how this setup is created with Maven, please refer to the POM[1] for this recipe.
+For details on how this setup is created with Maven, please refer to the [POM][1] for this recipe.
 
 [1]: https://github.com/jvanzyl/maven-recipes/blob/master/simple-binary-with-configuration/pom.xml
