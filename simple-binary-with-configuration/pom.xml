@@ -14,6 +14,13 @@
   <build>
     <plugins>
       <plugin>
+        <!--
+         |
+         | We are excluding the properties files in the JAR because we want to externalize them and make them easily
+         | editable in the final application assembly. The properties files are located in src/main/resources so
+         | during development will still be available on the classpath.
+         |
+        -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.3.2</version>
@@ -24,6 +31,16 @@
         </configuration>
       </plugin>
       <plugin>
+        <!--
+         |
+         | We want the shade plugin to package up all our dependencies into a single executable JAR. We are dealing
+         | with Spring so we need to make sure we specify resource transformers that will aggregate all the Spring
+         | related resources properly in the final shaded JAR. We also want to specify a Main-Class so that
+         | java -jar app-0.0.0-SNAPSHOT.jar will work, and we also specify a Class-Path entry which is a
+         | directory that contains our externalized properties files that we want to make easy to
+         | edit for the operator of the application.
+         | 
+        -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <version>1.4</version>
@@ -44,7 +61,6 @@
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
                     <Main-Class>io.jvz.maven.App</Main-Class>
-                    <Build-Number>123</Build-Number>
                     <Class-Path>config/</Class-Path>
                   </manifestEntries>
                 </transformer>
@@ -54,6 +70,19 @@
         </executions>
       </plugin>
       <plugin>
+        <!--
+         |  
+         | We want to create a final assembly that looks like the following:
+         |     
+         |   app-0.0.1-SNAPSHOT
+         |   ├── app-0.0.1-SNAPSHOT.jar
+         |   └── config
+         |       ├── server.properties
+         |       └── sql.properties
+         |
+         | We are packaging up our shaded JAR, along with putting our properties files in a config/ directory.
+         |
+        -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
